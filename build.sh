@@ -6,6 +6,8 @@ KERNEL_VERSION=$(echo $(make kernelversion) | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' 
 TOOLCHAIN_DIR=$KERNEL_DIR/toolchain
 CLANG_DIR=$TOOLCHAIN_DIR/clang
 GCC_DIR=$TOOLCHAIN_DIR/gcc
+# Hardcode these variable if you don't want prompt
+DEFCONFIG=
 
 # Function to detect OS and install dependencies
 install_dependencies () {
@@ -67,6 +69,24 @@ fi
 VERSION=$(echo "$KERNEL_VERSION" | cut -d. -f1)
 PATCH_LEVEL=$(echo "$KERNEL_VERSION" | cut -d. -f2)
 
+if [ -z $DEFCONFIG ]; then
+ while true; do
+ if read -t 10 -p "Enter defconfig you prefer: " DEFCONFIG; then
+  if [ -n $(find "$KERNEL_DIR/arch/arm64/configs" -type f -name "$DEFCONFIG") ]; then
+   echo "Use '$DEFCONFIG' as defconfig"
+   break
+  else
+   echo "No such defconfig name '$DEFCONFIG'"
+  fi
+ fi
+ done
+else
+ if [ ! -n $(find "$KERNEL_DIR/arch/arm64/configs" -type f -name "$DEFCONFIG") ]; then
+  echo "No such defconfig name '$DEFCONFIG'"
+  exit 1
+ fi
+fi
+
 if [ $VERSION = "4" ]; then
  export CROSS_COMPILE="${GCC_DIR}/aarch64/bin/aarch64-linux-android-"
  export CROSS_COMPILE_ARM32="${GCC_DIR}/arm32/bin/arm-linux-androideabi-"
@@ -112,11 +132,10 @@ export LD_LIBRARY_PATH="${CLANG_DIR}/lib:${CLANG_DIR}/lib64:${LD_LIBRARY_PATH}"
 
 build_kernel () {
     # Make default configuration.
-    make "${BUILD_OPTIONS[@]}" $DEFCONFIG custom.config
+    make "${BUILD_OPTIONS[@]}" "$DEFCONFIG" custom.config
 
     # Build the kernel
     make "${BUILD_OPTIONS[@]}" || exit 1
-
 }
 
 build_kernel
