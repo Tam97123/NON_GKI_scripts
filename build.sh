@@ -8,7 +8,7 @@ CLANG_DIR=$TOOLCHAIN_DIR/clang
 GCC_DIR=$TOOLCHAIN_DIR/gcc
 
 # Function to detect OS and install dependencies
-install_dependencies() {
+install_dependencies () {
     echo "Detecting OS and installing dependencies..."
     if command -v dnf &> /dev/null; then
      echo "Fedora/RHEL-based system detected, using dnf..."
@@ -37,7 +37,7 @@ if [ ! -f ".requirements" ]; then
  install_dependencies
 fi
 
-get_gcc () {
+get_gcc() {
     echo "Downloading scripts..."
     if ! curl -L https://raw.githubusercontent.com/Tam97123/NON_GKI_scripts/refs/heads/main/get_gcc.sh; then
      echo "Error: Can not download the file! Exiting..."
@@ -106,7 +106,7 @@ export KBUILD_BUILD_USER="@Tam97123"
 export PATH="${CLANG_DIR}/bin/clang:${PATH}"
 export LD_LIBRARY_PATH="${CLANG_DIR}/lib:${CLANG_DIR}/lib64:${LD_LIBRARY_PATH}"
 
-build_kernel(){
+build_kernel () {
     # Make default configuration.
     make "${BUILD_OPTIONS[@]}" $DEFCONFIG custom.config
 
