@@ -9,14 +9,14 @@ elif ! git clone --filter=blob:none --no-checkout https://android.googlesource.c
  echo "Error: Can not fetch AOSP history from Google."
  exit 1
 fi
+cd aosp_clang
 
 CLANG_TARGET=$(git log -n 1 --all --diff-filter=AM --format="%H" -- "$CLANG_NAME")
 
-cd aosp_clang
 if [ -z "$CLANG_TARGET" ]; then
-    echo "Error: '$CLANG_NAME' not found in AOSP history."
-    cd .. && rm -rf aosp_clang
-    exit 1
+ echo "Error: '$CLANG_NAME' not found in AOSP history."
+ cd .. && rm -rf aosp_clang
+ exit 1
 fi
 
 git sparse-checkout init --cone
