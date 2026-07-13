@@ -113,38 +113,62 @@ else
  build_without_gcc
 fi
 
+# --- 1. Base Defconfig Check ---
 if [ -z "$DEFCONFIG" ]; then
  while true; do
- if read -p "Enter defconfig: " DEFCONFIG || [ $? -gt 128 ]; then
-  if [ -n "$(find "$DEFCONFIG_DIR" -type f -name "$DEFCONFIG" -print -quit)" ]; then
-   echo "Use '$DEFCONFIG' as defconfig"
-   break
-  else
-   echo "No such defconfig name '$DEFCONFIG'"
+  if read -p "Enter defconfig: " DEFCONFIG || [ $? -gt 128 ]; then
+   if [ -z "$DEFCONFIG" ]; then
+    echo "Defconfig is necessary when building the kernel"
+   else
+    DEFCONFIG_PATH=$(find "$DEFCONFIG_DIR" -type f -name "$DEFCONFIG" -print -quit)
+    if [ -n "$DEFCONFIG_PATH" ]; then
+     DEFCONFIG="${DEFCONFIG_PATH#$DEFCONFIG_DIR/}"
+     echo "Use '$DEFCONFIG' as defconfig"
+     break
+    else
+     echo "No such defconfig name '$DEFCONFIG'"
+    fi
+   fi
   fi
- fi
  done
-elif [ ! -n "$(find "$DEFCONFIG_DIR" -type f -name "$DEFCONFIG" -print -quit)" ]; then
- echo "No such defconfig name '$DEFCONFIG'"
- exit 1
 else
- echo "Use '$DEFCONFIG' as defconfig"
+ DEFCONFIG_PATH=$(find "$DEFCONFIG_DIR" -type f -name "$DEFCONFIG" -print -quit)
+ if [ -n "$DEFCONFIG_PATH" ]; then
+  DEFCONFIG="${DEFCONFIG_PATH#$DEFCONFIG_DIR/}"
+  echo "Use '$DEFCONFIG' as defconfig"
+ else
+  echo "No such defconfig name '$DEFCONFIG'"
+  exit 1
+ fi
 fi
 
-if [ -z $CUSTOM_DEFCONFIG ]; then
+if [ -z "$CUSTOM_DEFCONFIG" ]; then
  while true; do
- if read -t 10 -p "Enter custom defconfig: " CUSTOM_DEFCONFIG || [ $? -gt 128 ]; then
-  if [ -z $CUSTOM_DEFCONFIG ]; then
-   echo "You do not use custom defconfig"
-   break
-  elif [ -n "$(find "$DEFCONFIG_DIR" -type f -name "$CUSTOM_DEFCONFIG" -print -quit)" ]; then
-   echo "Use '$CUSTOM_DEFCONFIG' as custom defconfig"
-   break
-  else
-   echo "No such defconfig name '$CUSTOM_DEFCONFIG'"
-   exit 1
+  if read -t 10 -p "Enter custom defconfig: " CUSTOM_DEFCONFIG || [ $? -gt 128 ]; then
+   if [ -z "$CUSTOM_DEFCONFIG" ]; then
+    echo "You do not use custom defconfig"
+    break
+   else
+    DEFCONFIG_PATH=$(find "$DEFCONFIG_DIR" -type f -name "$CUSTOM_DEFCONFIG" -print -quit)
+    if [ -n "$DEFCONFIG_PATH" ]; then
+     CUSTOM_DEFCONFIG="${DEFCONFIG_PATH#$DEFCONFIG_DIR/}"
+     echo "Use '$CUSTOM_DEFCONFIG' as custom defconfig"
+     break
+    else
+     echo "No such defconfig name '$CUSTOM_DEFCONFIG'. Please try again."
+    fi
+   fi
   fi
- done
+  done
+else
+ DEFCONFIG_PATH=$(find "$DEFCONFIG_DIR" -type f -name "$CUSTOM_DEFCONFIG" -print -quit)
+ if [ -n "$DEFCONFIG_PATH" ]; then
+  CUSTOM_DEFCONFIG="${DEFCONFIG_PATH#$DEFCONFIG_DIR/}"
+  echo "Use '$CUSTOM_DEFCONFIG' as custom defconfig"
+ else
+  echo "No such defconfig name '$CUSTOM_DEFCONFIG'"
+  exit 1
+ fi
 fi
 
 if [ ! -d "$CLANG_DIR" ]; then
