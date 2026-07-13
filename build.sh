@@ -146,6 +146,7 @@ if [ -z "$CUSTOM_DEFCONFIG" ]; then
  while true; do
   if read -t 10 -p "Enter custom defconfig: " CUSTOM_DEFCONFIG || [ $? -gt 128 ]; then
    if [ -z "$CUSTOM_DEFCONFIG" ]; then
+    echo ""
     echo "You do not use custom defconfig"
     break
    else
