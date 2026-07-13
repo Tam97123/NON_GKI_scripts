@@ -1,4 +1,5 @@
 #!/bin/bash
+REJECT_DIR=$KERNEL_DIR/patch_rejects
 
 cd $KERNEL_DIR
 
@@ -43,4 +44,29 @@ if [[ "$VERSION" -lt "5" || ( "$VERSION" -eq "5" && "$PATCH_LEVEL" -eq "4" ) ]];
 else
  echo "Temporary not support GKI kernel. Aborting..."
  exit 1
+fi
+
+mapfile -t REJ_FILES < <(find . -name "*.rej")
+
+# Check if the array has any items
+if [ ${#REJ_FILES[@]} -gt 0 ]; then
+ echo "[!] Conflicts detected. Found .rej files."
+    read -t 10 -p "Continue? (y/N): " COLLECT_REJECTS
+
+    if [ -z "$COLLECT_REJECTS" ]; then
+    
+        echo "[+] Collecting .rej and .orig files into $REJECT_DIR and continue"
+        mkdir -p "$REJECT_DIR"
+        find . -type f \( -name "*.rej" -o -name "*.orig" \) -exec mv {} "$REJECT_DIR/" \;
+
+    elif [[ "$COLLECT_REJECTS" =~ ^[Yy]$ ]]; then
+        echo "[+] Deleting .rej and .orig files and CONTINUING..."
+        find . -type f \( -name "*.rej" -o -name "*.orig" \) -delete
+
+    else
+        echo "[-] Collecting .rej and .orig files into $REJECT_DIR. Aborting..."
+        mkdir -p "$REJECT_DIR"
+        find . -type f \( -name "*.rej" -o -name "*.orig" \) -exec mv {} "$REJECT_DIR/" \;
+        exit 1
+    fi
 fi
