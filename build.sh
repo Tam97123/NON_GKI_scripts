@@ -113,7 +113,6 @@ else
  build_without_gcc
 fi
 
-# --- 1. Base Defconfig Check ---
 if [ -z "$DEFCONFIG" ]; then
  while true; do
   if read -p "Enter defconfig: " DEFCONFIG || [ $? -gt 128 ]; then
