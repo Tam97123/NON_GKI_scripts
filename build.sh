@@ -134,22 +134,17 @@ fi
 if [ -z $CUSTOM_DEFCONFIG ]; then
  while true; do
  if read -t 10 -p "Enter custom defconfig: " CUSTOM_DEFCONFIG || [ $? -gt 128 ]; then
-  if [ -n "$(find "$DEFCONFIG_DIR" -type f -name "$CUSTOM_DEFCONFIG" -print -quit)" ]; then
+  if [ -z $CUSTOM_DEFCONFIG ]; then
+   echo "You do not use custom defconfig"
+   break
+  elif [ -n "$(find "$DEFCONFIG_DIR" -type f -name "$CUSTOM_DEFCONFIG" -print -quit)" ]; then
    echo "Use '$CUSTOM_DEFCONFIG' as custom defconfig"
    break
   else
    echo "No such defconfig name '$CUSTOM_DEFCONFIG'"
+   exit 1
   fi
- else
-  echo "User do not use custom defconfig"
-  break
- fi
  done
-elif [ ! -n "$(find "$DEFCONFIG_DIR" -type f -name "$CUSTOM_DEFCONFIG")" ]; then
- echo "No such defconfig name '$CUSTOM_DEFCONFIG'"
- exit 1
-else
- echo "Use '$CUSTOM_DEFCONFIG' as custom defconfig"
 fi
 
 if [ ! -d "$CLANG_DIR" ]; then
