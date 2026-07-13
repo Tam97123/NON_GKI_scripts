@@ -117,6 +117,10 @@ else
  build_without_gcc
 fi
 
+if [ ! -d "$CLANG_DIR" ]; then
+ get_clang
+fi
+
 if [ -z "$DEFCONFIG" ]; then
  while true; do
   if read -p "Enter defconfig: " DEFCONFIG || [ $? -gt 128 ]; then
@@ -173,10 +177,6 @@ else
   echo "No such defconfig name '$CUSTOM_DEFCONFIG'"
   exit 1
  fi
-fi
-
-if [ ! -d "$CLANG_DIR" ]; then
- get_clang
 fi
 
 export ARCH=arm64
