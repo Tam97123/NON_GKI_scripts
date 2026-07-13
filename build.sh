@@ -75,7 +75,7 @@ build_without_gcc () {
 get_gcc() {
     echo "Downloading scripts..."
     if [ ! -f "get_gcc.sh" ]; then 
-     if ! curl -LO https://raw.githubusercontent.com/Tam97123/NON_GKI_scripts/refs/scripts/main/get_gcc.sh; then
+     if ! curl -LO https://raw.githubusercontent.com/Tam97123/NON_GKI_scripts/refs/heads/main/scripts/get_gcc.sh; then
       echo "Error: Can not download the file! Exiting..."
       exit 1
      fi
@@ -87,7 +87,7 @@ get_gcc() {
 get_clang () {
     echo "Downloading scripts..."
     if [ ! -f "get_clang.sh" ]; then 
-     if ! curl -LO https://raw.githubusercontent.com/Tam97123/NON_GKI_scripts/refs/scripts/main/get_clang.sh; then
+     if ! curl -LO https://raw.githubusercontent.com/Tam97123/NON_GKI_scripts/refs/heads/main/scripts/get_clang.sh; then
       echo "Error: Can not download the file! Exiting..."
       exit 1
      fi
