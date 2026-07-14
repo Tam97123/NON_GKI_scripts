@@ -44,7 +44,7 @@ mapfile -t REJ_FILES < <(find . -name "*.rej")
 if [ ${#REJ_FILES[@]} -gt 0 ]; then
  echo "Found fail patches!."
  while true; do
-  if read -t 10 -p "Continue build kernel? (y/N): " COLLECT_REJECTS
+  if read -t 10 -p "Continue build kernel? (y/N): " COLLECT_REJECTS; then
    if [ -z "$COLLECT_REJECTS" ]; then
     echo -e "\n[+] Collecting .rej and .orig files into $REJECT_DIR and continue"
     mkdir -p "$REJECT_DIR"
