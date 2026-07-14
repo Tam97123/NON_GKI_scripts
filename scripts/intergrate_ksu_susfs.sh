@@ -2,9 +2,11 @@
 REJECT_DIR=$KERNEL_DIR/patch_rejects
 
 # Abort scripts for kernel 4.4 and older
-if [[ "$VERSION" -lt "4" || ( "$VERSION" -eq "4" && "$PATCH_LEVEL" -eq "4" ) ]]; then
+if [[ "$VERSION" -eq "4" && "$PATCH_LEVEL" -eq "4" ]]; then
  echo "SUSFS does not support kernel 4.4! Use manual hook or backport manually instead."
  exit 1
+elif [ "$VERSION" -lt "4" ]; then
+ echo "SUSFS does not support kernel older than version 4.x ! Please backport manually."
 fi
 
 # Integrate KernelSU (ReSukiSU)
