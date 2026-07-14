@@ -11,8 +11,8 @@ if [ ! -d "$KERNEL_DIR/KernelSU" ]; then
 fi
 
 # For UI, you can remove these or comment out
-sed -i 's|$(subst ",,$(CONFIG_KSU_FULL_NAME_FORMAT))|%TAG_NAME%-%COMMIT_SHA%-t.me/noforce2pay/|' "$KERNEL_DIR/KernelSU/kernel/KBuild"
-sed -i '/-dirty/d' "$KERNEL_DIR/KernelSU/kernel/KBuild"
+sed -i 's|$(subst ",,$(CONFIG_KSU_FULL_NAME_FORMAT))|%TAG_NAME%-%COMMIT_SHA%-t.me/noforce2pay/|' "$KERNEL_DIR/KernelSU/kernel/Kbuild"
+sed -i '/-dirty/d' "$KERNEL_DIR/KernelSU/kernel/Kbuild"
 
 # Patch SUSFS (temporary for non gki)
 if [[ "$VERSION" -lt "5" || ( "$VERSION" -eq "5" && "$PATCH_LEVEL" -eq "4" ) ]]; then
