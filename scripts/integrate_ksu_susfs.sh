@@ -61,6 +61,7 @@ if [ ${#REJ_FILES[@]} -gt 0 ]; then
     exit 1
    else
     echo "Unknown answer: $COLLECT_REJECTS"
+   fi
   else
    echo -e "\n[+] Collecting .rej and .orig files into $REJECT_DIR and continue"
    mkdir -p "$REJECT_DIR"
