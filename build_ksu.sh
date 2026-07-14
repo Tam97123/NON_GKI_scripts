@@ -198,9 +198,8 @@ ccache -M 30G
 #      echo "Error: Can not download script."
 #      exit 1
 #     fi
-#     source ./integrate_ksu.sh
 #    else
-#     echo "Already patch KernelSU into kernel source"
+#     source ./integrate_ksu.sh
 #    fi
 #}
 
