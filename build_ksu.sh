@@ -7,11 +7,10 @@ TOOLCHAIN_DIR="$KERNEL_DIR/toolchain"
 CLANG_DIR="$TOOLCHAIN_DIR/clang"
 GCC_DIR="$TOOLCHAIN_DIR/gcc"
 DEFCONFIG_DIR="$KERNEL_DIR/arch/arm64/configs"
+REPO_URL="https://raw.githubusercontent.com/Tam97123/Build-Kernel_scripts/refs/heads/main"
 # Hardcode these variable if you don't want prompt
 DEFCONFIG=
 CUSTOM_DEFCONFIG=
-
-REPO_URL="https://raw.githubusercontent.com/Tam97123/Build-Kernel_scripts/refs/heads/main"
 
 # Init submodules
 git submodule init && git submodule update
