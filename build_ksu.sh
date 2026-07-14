@@ -211,9 +211,8 @@ integrate_ksu_susfs () {
       echo "Error: Can not download script."
       exit 1
      fi
-     source ./integrate_ksu_susfs.sh
     else
-     echo "Already patch KernelSU with SUSFS into kernel source"
+     source ./integrate_ksu_susfs.sh
     fi
     echo "Downloading defconfig to enable KSU..."
     if ! curl -L "$REPO_URL/defconfig/ksu-susfs_defconfig" -o "$DEFCONFIG_DIR/ksu-susfs_defconfig"; then
