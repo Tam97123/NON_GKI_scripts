@@ -47,7 +47,7 @@ move_rejects() {
  
   local orig_file="${rej_file%.rej}.orig"
   if [ -f "$orig_file" ]; then
-    mv "$orig_file" "$REJECT_DIR/$rel_dir/"
+    mv "$orig_file" "$REJECT_DIR/$rej_dir/"
   fi
  done
 }
