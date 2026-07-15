@@ -12,13 +12,17 @@ REPO_URL="https://raw.githubusercontent.com/Tam97123/Build-Kernel_scripts/refs/h
 DEFCONFIG=
 CUSTOM_DEFCONFIG=
 
-# Init submodules
-git submodule init && git submodule update
-
 # Function to detect OS and install dependencies
 install_dependencies () {
     echo "Detecting OS and installing dependencies..."
-    if command -v dnf &> /dev/null; then
+    if command -v apt &> /dev/null; then
+     echo "Ubuntu/Debian-based system detected, using apt..."
+     sudo apt update && sudo apt install -y git device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full android-sdk-libsparse-utils erofs-utils \
+      default-jdk gnupg flex bison gperf build-essential zip curl ccache libc6-dev libncurses-dev libx11-dev libreadline-dev libgl1 libgl1-mesa-dev \
+      make sudo bc grep tofrodos python3-markdown libxml2-utils xsltproc libtinfo6 \
+      repo cpio kmod openssl libelf-dev pahole libssl-dev libarchive-tools zstd libyaml-dev --fix-missing && \
+      wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
+    elif command -v dnf &> /dev/null; then
      echo "Fedora/RHEL-based system detected, using dnf..."
      sudo dnf group install "c-development" "development-tools" && \
      sudo dnf install -y dtc lz4 xz zlib-devel java-latest-openjdk-devel python3 \
@@ -26,13 +30,6 @@ install_dependencies () {
       ncurses-devel ccache libX11-devel readline-devel mesa-libGL-devel python3-markdown \
       libxml2 libxslt dos2unix kmod openssl elfutils-libelf-devel dwarves \
       openssl-devel libarchive zstd rsync libyaml-devel openssl-devel-engine --skip-unavailable
-    elif command -v apt &> /dev/null; then
-     echo "Ubuntu/Debian-based system detected, using apt..."
-     sudo apt update && sudo apt install -y git device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full android-sdk-libsparse-utils erofs-utils \
-      default-jdk gnupg flex bison gperf build-essential zip curl ccache libc6-dev libncurses-dev libx11-dev libreadline-dev libgl1 libgl1-mesa-dev \
-      make sudo bc grep tofrodos python3-markdown libxml2-utils xsltproc libtinfo6 \
-      repo cpio kmod openssl libelf-dev pahole libssl-dev libarchive-tools zstd libyaml-dev --fix-missing && \
-      wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
     else
      echo "Error: Can not determine package manager, please install dependencies manually."
      exit 1
@@ -68,6 +65,8 @@ build_without_gcc () {
      O="${KERNEL_DIR}/out"
      -j"$(nproc)"
      ARCH=arm64
+     LLVM=1
+     LLVM_IAS=1
      CC="ccache ${CLANG_DIR}/bin/clang"
      CLANG_TRIPLE=aarch64-linux-gnu-
     )
@@ -103,14 +102,12 @@ if [ -z "$KERNEL_VERSION" ]; then
 else
  VERSION=$(echo "$KERNEL_VERSION" | cut -d. -f1)
  PATCH_LEVEL=$(echo "$KERNEL_VERSION" | cut -d. -f2)
- echo "Kernel ${VERSION}.${PATCH_LEVEL}"
+ clear && echo "Kernel ${VERSION}.${PATCH_LEVEL}"
 fi
 
-if [[ "$VERSION" -eq "4" || ( "$VERSION" -eq "5" && "$PATCH_LEVEL" -eq "4" ) ]]; then
+if [[ "$VERSION" -eq "4" && "$PATCH_LEVEL" -le "14" ]]; then
  build_gcc
- if [ ! -d "$GCC_DIR" ]; then
-  get_gcc
- fi
+ if [ ! -d "$GCC_DIR" ]; then get_gcc; fi
 else
  build_without_gcc
 fi
