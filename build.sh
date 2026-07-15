@@ -113,6 +113,7 @@ else
 fi
 
 if [ ! -d "$CLANG_DIR" ]; then
+ mkdir -p $CLANG_DIR
  get_clang
 fi
 
