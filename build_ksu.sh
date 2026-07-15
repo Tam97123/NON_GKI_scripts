@@ -236,7 +236,7 @@ build_kernel () {
 if [[ "$VERSION" -lt "4" || ( "$VERSION" -eq "4" && "$PATCH_LEVEL" -eq "4" ) ]]; then
  echo "Not support kernel $VERSION.$PATCH_LEVEL! Please backport manually."
  exit 1
-elif [[ "$VERSION" -ge "5" && "$PATCH_LEVEL" -gt "4" ) ]]; then
+elif [[ "$VERSION" -ge "5" && "$PATCH_LEVEL" -gt "4" ]]; then
 # integrate_ksu
  echo "Not support GKI kernel! Please backport manually."
  exit 1
