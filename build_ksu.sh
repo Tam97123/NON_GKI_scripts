@@ -103,9 +103,8 @@ else
  VERSION=$(echo "$KERNEL_VERSION" | cut -d. -f1)
  PATCH_LEVEL=$(echo "$KERNEL_VERSION" | cut -d. -f2)
  clear && echo "Kernel ${VERSION}.${PATCH_LEVEL}"
-fi
+fi]
 
-mkdir $TOOLCHAIN_DIR
 if [ ! -d "$CLANG_DIR" ]; then get_clang; fi
 
 if [[ "$VERSION" -eq "4" && "$PATCH_LEVEL" -le "14" ]]; then
